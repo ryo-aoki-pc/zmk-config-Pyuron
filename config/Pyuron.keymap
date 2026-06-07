@@ -56,9 +56,9 @@
 };
 
 /*
- * 右トラックボール（カーソル移動）を動かすと MOUSE_MOVE レイヤーを
- * 自動有効化する（オートマウスレイヤー）。
- * 左トラックボールはスクロール専用のため連動させない。
+ * トラックボールを動かすと MOUSE_MOVE レイヤーを自動有効化する（オートマウスレイヤー）。
+ *   右（カーソル移動）: 下記 trackball_listener_R に zip_temp_layer を付与。
+ *   左（スクロール）  : Pyuron.dtsi の trackball_listener_L チェーン先頭に zip_temp_layer を付与。
  */
 &trackball_listener_R { input-processors = <&zip_temp_layer MOUS 10000>; };
 
@@ -476,7 +476,7 @@
         MOUSE_MOVE {
             bindings = <
 &none  &none  &none  &none  &none                        &none  &none  &none     &none  &none
-&none  &none  &none  &none  &none                        &none  &none  &mo SCRL  &none  &none
+&none  &none  &mo SCRL  &none  &none                        &none  &none  &mo SCRL  &none  &none
 &none  &none  &none  &none  &none  &none          &none  &none  &none  &none     &none  &none
 &none  &none  &none  &none                        &none         &none            &none  &none
             >;
