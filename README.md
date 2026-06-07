@@ -1,5 +1,9 @@
-## mainブランチ=PMW3610 
-## paw3220ブランチ=PAW3222/PAW3220
+# zmk-config-Pyuron
+
+Pyuron のファームウェアです。
+
+- main ブランチ = PMW3610
+- paw3220 ブランチ = PAW3222 / PAW3220
 
 ## キー割り当て一覧
 
