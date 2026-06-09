@@ -37,9 +37,9 @@ split_inputs {
       status = "disabled";
       device = <&trackball_split_L>;
 
-        // 通常: カーソル移動（AML自動有効化 + 軸補正）
+        // 通常: カーソル移動（AML自動有効化 + 軸補正。左カーソルは上下反転のため Y_INVERT を外す）
         input-processors = <&zip_temp_layer 8 10000>,  // 8 = MOUS
-                           <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
+                           <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)>;
 
         // SCRL(9) ではスクロール
         scroller_L {
@@ -60,11 +60,11 @@ split_inputs {
         input-processors = <&zip_temp_layer 8 10000>,  // 8 = MOUS
                            <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)>;
 
-        // SCRL(9) ではスクロール
+        // SCRL(9) ではスクロール（縦スクロールは反転のため Y_INVERT を外す）
         scroller_R {
             layers = <9>;  // 9 = SCRL
             input-processors = <&zip_temp_layer 8 10000>,
-                               <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)>,
+                               <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP)>,
                                <&zip_xy_scaler 1 16>,
                                <&zip_scroll_scaler 1 5>,
                                <&zip_xy_to_scroll_mapper>;
