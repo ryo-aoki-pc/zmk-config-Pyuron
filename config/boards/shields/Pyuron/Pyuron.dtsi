@@ -24,23 +24,51 @@ split_inputs {
       };
     };
 
+    /*
+     * 両トラックボール共通の挙動：
+     *   通常レイヤー       → base の input-processors（カーソル移動）。
+     *   SCRL(9) レイヤー時  → 子ノード scroller_* の input-processors（スクロール）。
+     * input-listener は「マッチした子ノードが base を置換」する（process-next は付けない）
+     * ため、子ノードは自己完結チェーンとして必要な processor を全て列挙する。
+     * 各チェーン先頭の zip_temp_layer 8 でスクロール中も MOUS(8) を維持する。
+     */
     trackball_listener_L: trackball_listener_L {
       compatible = "zmk,input-listener";
       status = "disabled";
       device = <&trackball_split_L>;
 
-        input-processors = <&zip_temp_layer 8 10000>,  // 8 = MOUS（マウス移動レイヤーを自動有効化）
-                           <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>,
-                           <&zip_xy_scaler 1 16>,
-                           <&zip_scroll_scaler 1 5>,
-                           <&zip_xy_to_scroll_mapper>;
+        // 通常: カーソル移動（AML自動有効化 + 軸補正）
+        input-processors = <&zip_temp_layer 8 10000>,  // 8 = MOUS
+                           <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>;
+
+        // SCRL(9) ではスクロール
+        scroller_L {
+            layers = <9>;  // 9 = SCRL
+            input-processors = <&zip_temp_layer 8 10000>,
+                               <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT | INPUT_TRANSFORM_Y_INVERT)>,
+                               <&zip_xy_scaler 1 16>,
+                               <&zip_scroll_scaler 1 5>,
+                               <&zip_xy_to_scroll_mapper>;
+        };
     };
 
     trackball_listener_R: trackball_listener_R {
       compatible = "zmk,input-listener";
       status = "disabled";
-        input-processors =
-            <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)>;
+
+        // 通常: カーソル移動（AML自動有効化 + 軸補正）
+        input-processors = <&zip_temp_layer 8 10000>,  // 8 = MOUS
+                           <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)>;
+
+        // SCRL(9) ではスクロール
+        scroller_R {
+            layers = <9>;  // 9 = SCRL
+            input-processors = <&zip_temp_layer 8 10000>,
+                               <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)>,
+                               <&zip_xy_scaler 1 16>,
+                               <&zip_scroll_scaler 1 5>,
+                               <&zip_xy_to_scroll_mapper>;
+        };
     };
 
     default_transform: keymap_transform_0 {
