@@ -4,7 +4,6 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/pointing.h>
-#include <dt-bindings/zmk/input_transform.h>
 
 /*
  * レイヤー番号の別名定義。
@@ -58,14 +57,11 @@
 };
 
 /*
- * トラックボールを動かすと MOUSE_MOVE レイヤーを自動有効化する（オートマウスレイヤー）。
- *   右（カーソル移動）: 下記 trackball_listener_R の input-processors に
- *     zip_temp_layer と zip_xy_transform（軸の向き補正）を列挙する。
- *     ※ Devicetree ではプロパティ再代入は「置換」のため、必要な processor は
- *       すべてここに書く（Pyuron.dtsi 側の input-processors は上書きされる）。
- *   左（スクロール）  : Pyuron.dtsi の trackball_listener_L チェーン先頭に zip_temp_layer を付与。
+ * トラックボールの input-processors（通常=カーソル移動／SCRL レイヤー=スクロール）は
+ * Pyuron.dtsi の trackball_listener_L / trackball_listener_R に集約している。
+ * 上の zip_temp_layer の excluded-positions(D/K) は、スクロール用 &mo SCRL を
+ * 押している間も MOUS(オートマウスレイヤー) を解除させないための設定。
  */
-&trackball_listener_R { input-processors = <&zip_temp_layer MOUS 10000>, <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)>; };
 
 / {
     combos { compatible = "zmk,combos"; };
