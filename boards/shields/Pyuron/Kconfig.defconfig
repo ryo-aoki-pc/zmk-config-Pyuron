@@ -1,7 +1,7 @@
 if SHIELD_PYURON_R
 
 config ZMK_KEYBOARD_NAME
-    default "Pyuron_R"
+    default "Pyuron"
 
 config ZMK_SPLIT
     default y
@@ -19,7 +19,7 @@ endif
 if SHIELD_PYURON_L
 
 config ZMK_KEYBOARD_NAME
-    default "Pyuron_L"
+    default "Pyuron"
 
 config ZMK_SPLIT
     default y

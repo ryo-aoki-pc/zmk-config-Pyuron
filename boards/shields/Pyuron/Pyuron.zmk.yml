@@ -1,0 +1,12 @@
+file_format: "1"
+id: Pyuron
+name: Pyuron
+type: shield
+url: https://github.com/ryo-aoki-pc/zmk-config-Pyuron
+requires: [seeeduino_xiao_ble]
+siblings:
+  - Pyuron_L
+  - Pyuron_R
+features:
+  - keys
+  - pointer
