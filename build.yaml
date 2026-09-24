@@ -1,8 +1,22 @@
+# This file generates the GitHub Actions matrix.
+---
 include:
-  - board: seeeduino_xiao_ble
-    shield: Pyuron_R rgbled_adapter
-    snippet: studio-rpc-usb-uart
+# Central = Right
   - board: seeeduino_xiao_ble
     shield: Pyuron_L rgbled_adapter
+    artifact-name: Pyuron_left_peripheral
+  - board: seeeduino_xiao_ble
+    shield: Pyuron_R rgbled_adapter
+    artifact-name: Pyuron_right_central
+    cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=y
+
+  - board: seeeduino_xiao_ble
+    shield: Pyuron_R rgbled_adapter
+    artifact-name: Pyuron_right_central_studio
+    snippet: studio-rpc-usb-uart
+    cmake-args: -DCONFIG_ZMK_STUDIO=y -DCONFIG_ZMK_STUDIO_LOCKING=n -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=y
+
+  # Reset
   - board: seeeduino_xiao_ble
     shield: settings_reset
+    artifact-name: settings_reset-seeeduino_xiao_ble-zmk

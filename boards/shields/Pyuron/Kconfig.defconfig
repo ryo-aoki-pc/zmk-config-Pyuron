@@ -1,33 +1,22 @@
-if SHIELD_PYURON_R
+if SHIELD_PYURON_L || SHIELD_PYURON_R
+    config ZMK_KEYBOARD_NAME
+        default "Pyuron"
 
-config ZMK_KEYBOARD_NAME
-    default "Pyuron"
+    config NFCT_PINS_AS_GPIOS
+        default y
 
-config ZMK_SPLIT
-    default y
-    
-config ZMK_POINTING
-    default y
+    config ZMK_SPLIT
+        default y
 
-config PAW3222
-    default y
-config ZMK_SPLIT_ROLE_CENTRAL
-    default y
+    config ZMK_POINTING
+        default y
 
-endif
+    config PAW3222
+        default y
 
-if SHIELD_PYURON_L
+    config INPUT
+        default y
 
-config ZMK_KEYBOARD_NAME
-    default "Pyuron"
-
-config ZMK_SPLIT
-    default y
-    
-config ZMK_POINTING
-    default y
-
-config PAW3222
-    default y
-
+    config SPI
+        default y
 endif
