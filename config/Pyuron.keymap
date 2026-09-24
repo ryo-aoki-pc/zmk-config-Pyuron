@@ -6,6 +6,15 @@
 #include <dt-bindings/zmk/pointing.h>
 
 /*
+ * LisM (42キー) のキーマップを Pyuron (40キー) へ移植したもの。
+ *
+ * 物理レイアウトの違い（LisM: 10/10/10/12、Pyuron: 10/10/12/8）は
+ * 次のルールで吸収している:
+ *   - LisM 最下段右の &mo BT → Pyuron 3段目中央の 2 キーへ移設
+ *   - 親指列が左右 4 キーずつしかないため、LisM 左端の &mo FUNC は持たない
+ *     （FUNC は右手側の 2 キーから入る）
+ *   - その他のキーは同じ行・同じ並びのまま
+ *
  * レイヤー番号の別名定義。
  *   &mo / &lt / &to などの「経路（どのレイヤーへ移動するか）」を
  *   数字ではなく名前で書けるようにして可読性を上げる。
@@ -62,6 +71,8 @@
  * 上の zip_temp_layer の excluded-positions(D/K) は、スクロール用 &mo SCRL を
  * 押している間も MOUS(オートマウスレイヤー) を解除させないための設定。
  */
+
+&mkp_input_listener { input-processors = <&zip_temp_layer MOUS 10000>; };
 
 / {
     combos { compatible = "zmk,combos"; };
@@ -416,7 +427,7 @@
 &kp N1                 &kp N2     &kp N3             &kp N4             &kp N5                                &kp N6         &kp N7         &kp N8            &kp N9         &kp N0
 &mt LCTRL TAB          &kp GRAVE  &kp LEFT_BRACKET   &kp RIGHT_BRACKET  &kp DELETE                            &kp BACKSPACE  &kp SEMICOLON  &kp SINGLE_QUOTE  &kp BACKSLASH  &trans
 &mt LEFT_SHIFT ESCAPE  &none      &none              &none              &none       &none          &none      &none          &kp EQUAL      &trans            &trans         &trans
-&trans                 &trans     &lt VIM_SYM SPACE  &none                                         &mo VIM_SYM               &none                            &trans         &none
+&trans                 &trans     &lt VIM_SYM SPACE  &none                                         &mo VIM_SYM               &none                            &none          &none
             >;
         };
 
@@ -425,7 +436,7 @@
 &none      &mm_vim_w  &kp LC(RIGHT)  &mm_vim_ctrl_r  &none                                    &mm_vim_y  &mm_vim_u          &none         &mm_vim_o  &kp LC(V)
 &kp LCTRL  &none      &mm_vim_d      &none           &mm_vim_g                                &kp LEFT   &mm_vim_j          &kp UP_ARROW  &kp RIGHT  &kp RCTRL
 &kp LEFT_SHIFT  &kp DELETE  &none    &mm_vim_v       &kp LC(LEFT)  &none          &none       &mm_vim_n  &none              &none         &none      &kp RIGHT_SHIFT
-&trans     &trans     &none          &mo VIM_SYM                                  &none                  &lt VIM_SYM ENTER                &trans     &none
+&trans     &trans     &none          &mo VIM_SYM                                  &none                  &lt VIM_SYM ENTER                &none      &none
             >;
         };
 
@@ -434,7 +445,7 @@
 &none           &none   &none   &mm_vim_shift_4  &none                          &mm_vim_shift_6  &none  &none  &none   &kp HOME
 &kp LCTRL       &none   &none   &none            &none                          &kp LEFT         &none  &none  &none   &kp RCTRL
 &kp LEFT_SHIFT  &none   &none   &none            &none  &none          &none    &none            &none  &none  &none   &kp RIGHT_SHIFT
-&trans          &trans  &none   &none                                  &none           &none                   &trans  &none
+&trans          &trans  &none   &none                                  &none           &none                   &none   &none
             >;
         };
 
