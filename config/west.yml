@@ -6,6 +6,8 @@ manifest:
       url-base: https://github.com/sekigon-gonnoc
     - name: caksoylar
       url-base: https://github.com/caksoylar
+    - name: ryo-aoki-pc
+      url-base: https://github.com/ryo-aoki-pc
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -17,5 +19,9 @@ manifest:
     - name: zmk-rgbled-widget
       remote: caksoylar
       revision: v0.3
+    # トラックボールの速さに応じてカーソルに倍率を掛ける入力プロセッサ (Pyuron.dtsi の trackball_accel)
+    - name: zmk-input-processor-xy-accel
+      remote: ryo-aoki-pc
+      revision: a5233f76a88b369dfebc37371f8244c89df2d0d4
   self:
     path: config
