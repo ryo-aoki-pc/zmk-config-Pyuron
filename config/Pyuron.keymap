@@ -59,20 +59,15 @@
 /*
  * AML (MOUSE_MOVE) 中に押しても AML を解除しないキー位置。
  *   D / K: スクロール用の &mo SCRL。
- *   A / - / Z / / / Win / Alt: MOUSE_MOVE / MOUSE_SCROLL では修飾キー
- *     (BASE の &mt / &kp と同じ Ctrl / Shift / Win / Alt)。AML に入ってから
- *     Shift + クリック、Ctrl + ホイールなどを押せるようにする。
+ * 修飾キーの位置 (A / - / Z / / / Win / Alt) は除外しない。MOUSE_MOVE では &trans
+ * (BASE と同じ &mt / &kp) で、押すと AML が切れる (タップで文字、長押しで修飾キー)。
+ * 修飾キーとクリック・ホイールを組み合わせるときは、D / K を押してから修飾キーを押す
+ * (MOUSE_SCROLL の Ctrl / Shift / Win / Alt になる。例: D → Z → F で Shift + クリック)。
  */
 &zip_temp_layer {
     excluded-positions = <
-        10 // A (左 Ctrl)
         12 // D (&mo SCRL)
         17 // K (&mo SCRL)
-        19 // - (右 Ctrl)
-        20 // Z (左 Shift)
-        31 // / (右 Shift)
-        32 // 左 Win
-        33 // 左 Alt
     >;
 
     require-prior-idle-ms = <200>;
@@ -81,9 +76,8 @@
 /*
  * トラックボールの input-processors（通常=カーソル移動／SCRL レイヤー=スクロール）は
  * Pyuron.dtsi の trackball_listener_L / trackball_listener_R に集約している。
- * 上の zip_temp_layer の excluded-positions は、スクロール用 &mo SCRL (D/K) や
- * 修飾キー (A / - / Z / / / Win / Alt) を押している間も MOUS(オートマウスレイヤー) を
- * 解除させないための設定。
+ * 上の zip_temp_layer の excluded-positions は、スクロール用 &mo SCRL (D/K) を
+ * 押しても MOUS(オートマウスレイヤー) を解除させないための設定。
  */
 
 &mkp_input_listener { input-processors = <&zip_temp_layer MOUS 10000>; };
@@ -502,9 +496,9 @@
         MOUSE_MOVE {
             bindings = <
 &none  &none  &none  &none  &none                        &none  &none  &none     &none  &none
-&kp LCTRL  &none  &mo SCRL  &none  &none                        &none  &none  &mo SCRL  &none  &kp RCTRL
-&kp LEFT_SHIFT  &none  &none  &none  &none  &none          &none  &none  &none  &none     &none  &kp RIGHT_SHIFT
-&kp LEFT_WIN  &kp LEFT_ALT  &none  &none                        &none         &none            &none  &none
+&trans     &none  &mo SCRL  &none  &none                        &none  &none  &mo SCRL  &none  &trans
+&trans          &none  &none  &none  &none  &none          &none  &none  &none  &none     &none  &trans
+&trans        &trans        &none  &none                        &none         &none            &none  &none
             >;
         };
 
