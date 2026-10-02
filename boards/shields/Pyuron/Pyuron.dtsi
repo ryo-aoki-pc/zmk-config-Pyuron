@@ -43,22 +43,40 @@ split_inputs {
     };
 
     /*
+     * AML の発動条件 (zmk-input-processor-aml-threshold)。リスナーで zip_temp_layer の代わりに使い、
+     * キー入力の振動などでボールがわずかに動いても AML (MOUS) にしない。止まっていた状態から動いた量
+     * (X と Y それぞれ向き付きで足すので、行ったり来たりする振動は打ち消し合う) の大きさが threshold
+     * (加速の後の値 = カーソルの移動量) に達したら zip_temp_layer に渡す。キーを押した・離したあと
+     * require-prior-idle-ms (Pyuron.keymap の zip_temp_layer の値) の間も渡さない。
+     * 左右のトラックボールのリスナーで共有する (状態はリスナーごとに持つ)。
+     * まだ振動で AML になるなら threshold を上げ、少し動かしただけでは AML にならないなら下げる
+     */
+    /omit-if-no-ref/ aml_threshold: aml_threshold {
+        compatible = "zmk,input-processor-aml-threshold";
+        #input-processor-cells = <2>;
+        temp-layer = <&zip_temp_layer>;
+        threshold = <10>;
+    };
+
+    /*
      * 両トラックボール共通の挙動：
      *   通常レイヤー       → base の input-processors（カーソル移動）。
      *   SCRL(9) レイヤー時  → 子ノード scroller_* の input-processors（スクロール）。
      * input-listener は「マッチした子ノードが base を置換」する（process-next は付けない）
      * ため、子ノードは自己完結チェーンとして必要な processor を全て列挙する。
-     * 各チェーン先頭の zip_temp_layer 8 でスクロール中も MOUS(8) を維持する。
+     * 通常のチェーンは最後の aml_threshold 8 で MOUS(8) を自動有効化する (加速の後の値で数え、
+     * わずかな動きでは発動しない)。スクロールのチェーンは先頭の zip_temp_layer 8 でスクロール中も
+     * MOUS(8) を維持する。
      */
     trackball_listener_L: trackball_listener_L {
       compatible = "zmk,input-listener";
       status = "disabled";
       device = <&trackball_split_L>;
 
-        // 通常: カーソル移動（AML自動有効化 + 軸補正 + 加速。左カーソルは上下反転のため Y_INVERT を外す）
-        input-processors = <&zip_temp_layer 8 10000>,  // 8 = MOUS
-                           <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)>,
-                           <&trackball_accel>;
+        // 通常: カーソル移動（軸補正 + 加速 + AML自動有効化。左カーソルは上下反転のため Y_INVERT を外す）
+        input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_X_INVERT)>,
+                           <&trackball_accel>,
+                           <&aml_threshold 8 10000>;  // 8 = MOUS（わずかな動きでは発動しない）
 
         // SCRL(9) ではスクロール
         scroller_L {
@@ -74,10 +92,10 @@ split_inputs {
       compatible = "zmk,input-listener";
       status = "disabled";
 
-        // 通常: カーソル移動（AML自動有効化 + 軸補正 + 加速）
-        input-processors = <&zip_temp_layer 8 10000>,  // 8 = MOUS
-                           <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)>,
-                           <&trackball_accel>;
+        // 通常: カーソル移動（軸補正 + 加速 + AML自動有効化）
+        input-processors = <&zip_xy_transform (INPUT_TRANSFORM_XY_SWAP | INPUT_TRANSFORM_Y_INVERT)>,
+                           <&trackball_accel>,
+                           <&aml_threshold 8 10000>;  // 8 = MOUS（わずかな動きでは発動しない）
 
         // SCRL(9) ではスクロール（縦スクロールは反転のため Y_INVERT を外す）
         scroller_R {
