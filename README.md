@@ -1,9 +1,8 @@
 # zmk-config-Pyuron
 
-Pyuron のファームウェアです。
+Pyuron のファームウェアです。[zmk-config-LisM](https://github.com/ryo-aoki-pc/zmk-config-LisM) を基準に、キーマップ・conf・CI を他のキーボードと揃えています。
 
-- main ブランチ = PMW3610
-- paw3220 ブランチ = PAW3222 / PAW3220
+- custom ブランチ (このファームウェアのビルド元) = PAW3222 のトラックボール (左右)
 
 ## キー割り当て一覧
 
